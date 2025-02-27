@@ -1,8 +1,20 @@
 #include <iostream>
 #include <sstream>
 #include<vector>
-#include<unordered_set>
+#include <unordered_set>
+#include <cstdlib>
+#include <filesystem>
 using namespace std;
+
+string find_executable(string exe_path, vector<string>exec_dirs){
+  for(auto dir: exec_dirs){
+    string path = dir + "/" + exe_path;
+    if(std::filesystem::exists(path)){
+      return path;
+    }
+  }
+  return "";
+}
 
 int main()
 {
@@ -10,8 +22,16 @@ int main()
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
+  string env_variable = "PATH";
+  char* path= getenv(env_variable.c_str());
+  vector<string>exec_dirs;
+  stringstream ss(path);
+  string token;
+  while(getline(ss,token,':')){
+    exec_dirs.push_back(token);
+  }
+
   bool end_program = false;
-  unordered_set<string> builtins={"echo","cd","pwd", "exit", "type"};
   while (!end_program)
   {
     // Taking the user input
@@ -35,14 +55,15 @@ int main()
       for(int i=1;i<arguments.size();i++) cout<<arguments[i]<<" ";
       cout<<endl;
     }else if(arguments[0]=="type"){
-      if(builtins.find(arguments[1]) != builtins.end()){
-        cout<<arguments[1]<<" is a shell builtin"<<endl;
+      string exe_path = find_executable(arguments[1],exec_dirs);
+      if(exe_path != ""){
+        cout<<arguments[1]<<" is "<<exe_path<<endl;
       }else{
         cout<<arguments[1]<<": not found"<<endl;
       }
     }
     else{
-      std::cout << input << ": command not found" << std::endl;
+      cout<<input<<": command not found"<<endl;
     }
 
   }
