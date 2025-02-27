@@ -22,7 +22,7 @@ int main()
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
-  unordered_set<string>builtins{"echo","exit"};
+  unordered_set<string>builtins{"echo","exit","type"};
 
   string env_variable = "PATH";
   char* path= getenv(env_variable.c_str());
