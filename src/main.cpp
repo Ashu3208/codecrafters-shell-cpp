@@ -22,6 +22,8 @@ int main()
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
+  unordered_set<string>builtins{"echo","exit"};
+
   string env_variable = "PATH";
   char* path= getenv(env_variable.c_str());
   vector<string>exec_dirs;
@@ -55,6 +57,10 @@ int main()
       for(int i=1;i<arguments.size();i++) cout<<arguments[i]<<" ";
       cout<<endl;
     }else if(arguments[0]=="type"){
+      if(builtins.count(arguments[1])){
+        cout<<arguments[1]<<" is a shell builtin"<<endl;
+        continue;
+      }
       string exe_path = find_executable(arguments[1],exec_dirs);
       if(exe_path != ""){
         cout<<arguments[1]<<" is "<<exe_path<<endl;
