@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include <cstdlib>
 #include <filesystem>
+#include <unistd.h>
 using namespace std;
 
 string find_executable(string exe_path, vector<string>exec_dirs){
@@ -69,7 +70,21 @@ int main()
       }
     }
     else{
-      cout<<input<<": command not found"<<endl;
+      string exe_path = find_executable(arguments[0],exec_dirs);
+      if(exe_path != ""){
+        // Run the executable
+        char* args[arguments.size() + 1];
+        for(size_t i = 0; i < arguments.size(); i++) {
+            args[i] = const_cast<char*>(arguments[i].c_str());
+        }
+        args[arguments.size()] = nullptr;
+        execvp(exe_path.c_str(), args);
+        // If execvp returns, it means there was an error
+        perror("execvp failed");
+        exit(1);
+      }else{
+        cout<<input<<": command not found"<<endl;
+      }
     }
 
   }
