@@ -11,7 +11,7 @@ int main()
   std::cerr << std::unitbuf;
 
   bool end_program = false;
-  unordered_set<string> builtins={"echo","cd","pwd", "exit"};
+  unordered_set<string> builtins={"echo","cd","pwd", "exit", "type"};
   while (!end_program)
   {
     // Taking the user input
