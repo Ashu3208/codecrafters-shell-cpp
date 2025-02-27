@@ -82,6 +82,7 @@ int main()
         execvp(exe_path.c_str(), args);
         // If execvp returns, it means there was an error
         perror("execvp failed");
+        wait(nullptr);
         exit(1);
       }
       if(exe_path == ""){
