@@ -71,7 +71,8 @@ int main()
     }
     else{
       string exe_path = find_executable(arguments[0],exec_dirs);
-      if(exe_path != ""){
+      int pid = fork();
+      if(exe_path != "" && pid == 0){
         // Run the executable
         char* args[arguments.size() + 1];
         for(size_t i = 0; i < arguments.size(); i++) {
@@ -82,7 +83,8 @@ int main()
         // If execvp returns, it means there was an error
         perror("execvp failed");
         exit(1);
-      }else{
+      }
+      if(exe_path == ""){
         cout<<input<<": command not found"<<endl;
       }
     }
